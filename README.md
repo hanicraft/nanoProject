@@ -15,5 +15,10 @@ a small game hacking library
 
 completetion : 70%
 
+# nanoGameHack
+a math library for 2d and 3d games
+
+completetion : 100%
+
 # License
 this project is licensed under MIT License
