@@ -216,3 +216,14 @@ void findString(GameProcess* process, char* string, int isWide) {
         printf("String found at address: 0x%x\n", address);
     }
 }
+
+DWORD getLastError() {
+	return GetLastError();
+}
+
+void printLastError() {
+	char* message = (char*)malloc(256);
+	FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, getLastError(), 0, message, 256, NULL);
+	printf("%s\n", message);
+	free(message);
+}
