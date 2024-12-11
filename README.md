@@ -8,12 +8,12 @@ a file system for your games
 
 supports both windows and unix
 
-completetion : 100%
+completetion : 90%(required restructering)
 
 # nanoGameHack
 a small game hacking library
 
-completetion : 70%(needs error handling)
+completetion : 80%(partial error handling implemented)
 
 # nanoMath
 a math library for 2d and 3d games
