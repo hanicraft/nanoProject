@@ -15,7 +15,7 @@ a small game hacking library
 
 completetion : 70%
 
-# nanoGameHack
+# nanoMath
 a math library for 2d and 3d games
 
 completetion : 100%
