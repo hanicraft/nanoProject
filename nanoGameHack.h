@@ -191,17 +191,6 @@ void freeMemoryAddress(GameMemoryAddress* address) {
 	free(address);
 }
 
-// Function to scan memory for patterns
-void scanMemory(GameProcess* process, DWORD address, DWORD size, uint8_t* pattern, DWORD patternSize) {
-	uint8_t* buffer = readMemory(process, address, size);
-	for (DWORD i = 0; i < size - patternSize; i++) {
-		if (memcmp(buffer + i, pattern, patternSize) == 0) {
-			printf("Pattern found at address: 0x%x\n", address + i);
-		}
-	}
-	free(buffer);
-}
-
 // Function for hooks
 void hookFunction(GameProcess* process, DWORD address, void* hook) {
 	DWORD oldProtection;
