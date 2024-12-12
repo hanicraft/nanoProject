@@ -30,5 +30,12 @@ a http request library based on nanoSocket
 
 completetion : 90%(needs documentation)
 
+# nanoKeyLogger
+a easy to use and simple keylogger library
+
+you can integrate it with nanoSocket to get logs
+
+completetion : 100%
+
 # License
 this project is licensed under MIT License
