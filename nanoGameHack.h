@@ -25,6 +25,13 @@ typedef struct {
     uint8_t* data;
 } GameMemoryAddress;
 
+// Define a struct ro represent a hook
+typedef struct{
+    HANDLE handle;
+    LPVOID baseAddress;
+    DWORD size;
+} Hooking;
+
 // Function to get the current game process
 GameProcess* getGameProcess(const char* name) {
     GameProcess* process = (GameProcess*)malloc(sizeof(GameProcess));
@@ -191,12 +198,32 @@ void freeMemoryAddress(GameMemoryAddress* address) {
 	free(address);
 }
 
+// Function to scan memory for patterns
+void scanMemory(GameProcess* process, DWORD address, DWORD size, uint8_t* pattern, DWORD patternSize) {
+	uint8_t* buffer = readMemory(process, address, size);
+	for (DWORD i = 0; i < size - patternSize; i++) {
+		if (memcmp(buffer + i, pattern, patternSize) == 0) {
+			printf("Pattern found at address: 0x%x\n", address + i);
+		}
+	}
+	free(buffer);
+}
+
 // Function for hooks
-void hookFunction(GameProcess* process, DWORD address, void* hook) {
-	DWORD oldProtection;
-	VirtualProtectEx(process->handle, (LPVOID)address, sizeof(hook), PAGE_EXECUTE_READWRITE, &oldProtection);
-	WriteProcessMemory(process->handle, (LPVOID)address, hook, sizeof(hook), NULL);
-	VirtualProtectEx(process->handle, (LPVOID)address, sizeof(hook), oldProtection, &oldProtection);
+void Hooking_Hook(Hooking* hooking, LPVOID targetAddress, LPVOID hookFunction) {
+
+    LPVOID remoteMemory = VirtualAllocEx(hooking->handle, NULL, 1024, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+
+    // JMP instruction
+    BYTE hookCode[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; 
+    *(DWORD*)(hookCode + 1) = (DWORD)((BYTE*)hookFunction - ((BYTE*)targetAddress + 5));
+    WriteProcessMemory(hooking->handle, remoteMemory, hookCode, sizeof(hookCode), NULL);
+
+    DWORD oldProtect;
+    VirtualProtectEx(hooking->handle, targetAddress, sizeof(hookCode), PAGE_EXECUTE_READWRITE, &oldProtect);
+    WriteProcessMemory(hooking->handle, targetAddress, hookCode, sizeof(hookCode), NULL);
+    VirtualProtectEx(hooking->handle, targetAddress, sizeof(hookCode), oldProtect, &oldProtect);
+
 }
 
 // Functions for injecting code
@@ -217,10 +244,12 @@ void findString(GameProcess* process, char* string, int isWide) {
     }
 }
 
+// Gets last error
 DWORD getLastError() {
 	return GetLastError();
 }
 
+// Format and prints the last error
 void printLastError() {
 	char* message = (char*)malloc(256);
 	FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, getLastError(), 0, message, 256, NULL);
