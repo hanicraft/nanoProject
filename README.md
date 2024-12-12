@@ -5,7 +5,7 @@ if you have a question or want suggest me to add features just open an issue
 
 | Name              | Info                                            | Completion                  |
 |-------------------|------------------------------------------------|-----------------------------|
-| nanoFS           | A file system for your games. Supports both Windows and Unix. | 90% (requires restructuring) |
+| nanoFS.           | A file system for your games. Supports both Windows and Unix. | 90% (requires restructuring) |
 | nanoGameHack     | A small game hacking library.                   | 80% (partial error handling implemented) |
 | nanoReverseShell | A reverse shell, requires nanoSocket library.   | 100%                        |
 | nanoMath         | A math library for 2D and 3D games.             | 100%                        |
