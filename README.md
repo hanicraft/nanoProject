@@ -15,6 +15,11 @@ a small game hacking library
 
 completetion : 80%(partial error handling implemented)
 
+# nanoReverseShell
+a reverse shell, requires nanoSocket library
+
+completetion : 100%
+
 # nanoMath
 a math library for 2d and 3d games
 
